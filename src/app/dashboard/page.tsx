@@ -5,6 +5,7 @@ import EmailReportButton from "@/components/EmailReportButton";
 import QuickPainButtons from "@/components/QuickPainButtons";
 import { redirect } from "next/navigation";
 
+
 export default async function Dashboard() {
   const supabase = await createClient();
   const { data: user } = await supabase.auth.getUser();
