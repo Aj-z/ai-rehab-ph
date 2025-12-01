@@ -1,6 +1,14 @@
 "use client";
 import {
-  AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, defs, linearGradient, stop
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  defs,
+  linearGradient,
+  stop,
 } from "recharts";
 
 type Log = { logged_at: string; pain_level: number };
