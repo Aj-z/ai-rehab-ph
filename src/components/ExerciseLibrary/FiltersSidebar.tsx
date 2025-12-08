@@ -6,7 +6,7 @@ interface FilterProps {
     difficulty: string;
     equipment: string;
   };
-  onChange: (filterType: string, value: string) => void;
+  onChange: (filterType: 'bodyPart' | 'difficulty' | 'equipment', value: string) => void;
   onCreateWorkoutPlan: () => void;
   workoutPlanCount: number;
 }
@@ -36,7 +36,7 @@ const FiltersSidebar: React.FC<FilterProps> = ({ currentFilters, onChange, onCre
                   className={`filter-tag px-3 py-2 rounded-lg text-sm cursor-pointer ${
                     currentValue === value ? 'bg-blue-300 text-white' : 'bg-gray-100 text-gray-700'
                   }`}
-                  onClick={() => onChange(type, value)}
+                  onClick={() => onChange(type as 'bodyPart' | 'difficulty' | 'equipment', value)}
                 >
                   {value.replace('-', ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
                 </div>

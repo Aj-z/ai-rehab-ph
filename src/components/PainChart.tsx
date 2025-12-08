@@ -6,9 +6,6 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  defs,
-  linearGradient,
-  stop,
 } from "recharts";
 
 

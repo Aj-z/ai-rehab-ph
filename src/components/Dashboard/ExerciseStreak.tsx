@@ -43,9 +43,10 @@ export function ExerciseStreak({ userId }: Props) {
         .order('session_date', { ascending: false });
 
       if (exerciseData) {
-        setExercises(exerciseData);
-        calculateStreak(exerciseData);
-        calculateStats(exerciseData);
+        const validExercises = exerciseData.filter(ex => ex.session_date !== null) as ExerciseSession[];
+        setExercises(validExercises);
+        calculateStreak(validExercises);
+        calculateStats(validExercises);
       }
     } catch (error) {
       console.error('Failed to load exercises:', error);

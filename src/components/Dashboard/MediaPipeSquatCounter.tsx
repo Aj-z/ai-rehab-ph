@@ -23,7 +23,7 @@ export function MediaPipeSquatCounter({ userId, onExerciseSaved }: Props) {
   const [sessionDuration, setSessionDuration] = useState(0); // Track duration
   
   const poseLandmarkerRef = useRef<any>(null);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number | undefined>(undefined);
   const squatState = useRef<'up' | 'down'>('up');
   const sessionStartTimeRef = useRef<number>(0); // For precise timing
   const minConfidence = 0.7;

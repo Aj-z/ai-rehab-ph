@@ -69,12 +69,15 @@ export async function POST(req: Request) {
 
     // Medical History details
     Object.entries(assessment.medicalHistory || {}).forEach(([key, val]) => {
-      write(key, val || "—");
+      write(key, (val !== undefined && val !== null && val !== '') ? String(val) : "—");
     });
 
     const pdfData = await pdf.save();
 
-    return new NextResponse(pdfData, {
+    // Convert Uint8Array to a Buffer for Node.js Response
+    const buffer = Buffer.from(pdfData);
+
+    return new NextResponse(buffer, {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": "attachment; filename=assessment.pdf",

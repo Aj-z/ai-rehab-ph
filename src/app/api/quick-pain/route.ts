@@ -10,12 +10,12 @@ export async function POST(req: NextRequest) {
   const { data: inj } = await supabase
     .from("injuries")
     .select("id")
-    .eq("user_id", user.id)
+    .eq("user_id", user.user!.id)
     .single();
   if (!inj) return NextResponse.json({ error: "No injury" }, { status: 400 });
 
   const { pain } = await req.json();
-  await supabase.from("daily_logs").insert({ injury_id: inj.id, pain_level: pain });
+  await supabase.from("daily_logs").insert([{ injury_id: inj.id, pain_level: pain, user_id: user.user!.id }]);
 
   return NextResponse.json({ ok: true });
 }

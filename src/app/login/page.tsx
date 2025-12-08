@@ -4,8 +4,9 @@ import AuthForm from '@/components/AuthForm';
 import { useSearchParams } from 'next/navigation';
 import { toast, Toaster } from 'sonner';
 import { useEffect } from 'react';
+import { Suspense } from 'react';
 
-export default function LoginPage() {
+function LoginContent() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -67,5 +68,24 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-800 flex items-center justify-center p-4">
+        <div className="w-full max-w-md glass-card rounded-2xl p-8 border border-white/10 shadow-2xl">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
+              <span className="text-2xl font-bold text-white">AI</span>
+            </div>
+            <p className="text-gray-400">Loading...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }

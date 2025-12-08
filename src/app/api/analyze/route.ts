@@ -23,7 +23,11 @@ async function analyzeData(prompt: string): Promise<string> {
         ],
       });
 
-      return response.choices[0].message.content;
+      const content = response.choices[0].message.content;
+      if (!content) {
+        throw new Error('Empty response from AI model');
+      }
+      return content;
     } catch (error: any) {
       if (error.response && error.response.status === 429) {
         // Implement exponential backoff

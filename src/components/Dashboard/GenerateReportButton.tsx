@@ -106,7 +106,7 @@ export function GenerateReportButton({ userId, userName = 'Patient' }: Props) {
       const recentLogs = dailyLogs?.slice(-7) || [];
       recentLogs.forEach((log, index) => {
         const y = 183 + (index * 8);
-        const date = new Date(log.logged_at).toLocaleDateString();
+        const date = log.logged_at ? new Date(log.logged_at).toLocaleDateString() : 'N/A';
         doc.text(`• ${date}: ${log.pain_level}/10`, 20, y);
       });
 

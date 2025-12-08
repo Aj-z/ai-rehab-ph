@@ -38,7 +38,18 @@ export function InjuryManager({ userId }: Props) {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setInjuries(data || []);
+      setInjuries(
+        (data || []).map((injury) => ({
+          ...injury,
+          description: injury.description ?? "",
+          injury_type: injury.injury_type ?? "",
+          body_part: injury.body_part ?? "unspecified",
+          severity: injury.severity ?? 5,
+          status: (injury.status ?? "active") as "active" | "healing" | "recovered",
+          created_at: injury.created_at ?? "",
+          is_active: injury.is_active ?? true,
+        }))
+      );
     } catch (error: any) {
       toast.error(error.message);
       console.error(error);
@@ -65,6 +76,7 @@ export function InjuryManager({ userId }: Props) {
       setFormData({
         injury_type: "",
         description: "",
+        body_part: "unspecified",
         severity: 5,
         status: "active",
       });

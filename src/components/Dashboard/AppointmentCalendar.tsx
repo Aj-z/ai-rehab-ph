@@ -40,7 +40,15 @@ export function AppointmentCalendar({ userId }: Props) {
         .order("appointment_date", { ascending: true });
 
       if (error) throw error;
-      setAppointments(data || []);
+      setAppointments(
+        (data || []).map((apt) => ({
+          ...apt,
+          location: apt.location ?? undefined,
+          notes: apt.notes ?? undefined,
+          professional_name: apt.professional_name ?? undefined,
+          status: (apt.status ?? "scheduled") as "scheduled" | "completed" | "cancelled",
+        }))
+      );
     } catch (error) {
       toast.error("Failed to load appointments");
       console.error(error);

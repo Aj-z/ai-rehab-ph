@@ -1,5 +1,7 @@
 import { createBrowserClient } from '@supabase/ssr'
-import type { Database } from '@/types/supabase'
+// Update the import path to the correct location of your Database type
+import type { Database } from '../lib/database.types.ts' // Adjust the path as needed
+
 
 export function createClient() {
   return createBrowserClient<Database>(

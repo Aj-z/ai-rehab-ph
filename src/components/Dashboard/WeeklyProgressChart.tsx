@@ -28,12 +28,23 @@ export function WeeklyProgressChart({ initialLogs = [] }: Props) {
 
       const { data } = await supabase
         .from('daily_logs')
-        .select('pain_level, logged_at')
+        .select('id, user_id, injury_id, pain_level, mood, notes, logged_at')
         .eq('user_id', user.id)
         .gte('logged_at', subDays(new Date(), 7).toISOString())
         .order('logged_at', { ascending: true });
 
-      processChartData(data || []);
+      // Ensure all required fields exist for DailyLog
+      const logs: DailyLog[] = (data || []).map((log: any) => ({
+        id: log.id ?? '',
+        user_id: log.user_id ?? '',
+        injury_id: log.injury_id ?? '',
+        pain_level: log.pain_level ?? null,
+        mood: log.mood ?? null,
+        notes: log.notes ?? '',
+        logged_at: log.logged_at ?? null,
+      }));
+
+      processChartData(logs);
     } catch (error) {
       console.error('Failed to load chart data:', error);
     }
@@ -55,14 +66,14 @@ export function WeeklyProgressChart({ initialLogs = [] }: Props) {
 
     setChartData(data);
 
-    const validPainLevels = data.filter(d => d.pain !== null).map(d => d.pain);
-    const avg = validPainLevels.reduce((a, b) => a + b, 0) / validPainLevels.length;
+    const validPainLevels = data.filter(d => d.pain !== null).map(d => d.pain as number);
+    const avg = validPainLevels.reduce((a: number, b: number) => a + b, 0) / validPainLevels.length;
     setAveragePain(avg);
 
     const firstHalf = validPainLevels.slice(0, Math.floor(validPainLevels.length / 2));
     const secondHalf = validPainLevels.slice(Math.floor(validPainLevels.length / 2));
-    const firstAvg = firstHalf.reduce((a, b) => a + b, 0) / firstHalf.length;
-    const secondAvg = secondHalf.reduce((a, b) => a + b, 0) / secondHalf.length;
+    const firstAvg = firstHalf.reduce((a: number, b: number) => a + b, 0) / firstHalf.length;
+    const secondAvg = secondHalf.reduce((a: number, b: number) => a + b, 0) / secondHalf.length;
 
     if (secondAvg < firstAvg - 0.5) setTrend('down'); // Improving
     else if (secondAvg > firstAvg + 0.5) setTrend('up'); // Worsening

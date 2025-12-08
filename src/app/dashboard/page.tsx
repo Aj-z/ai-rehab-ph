@@ -26,8 +26,12 @@ export default async function DashboardPage() {
       })
       .select()
       .single()
-    return <DashboardContent user={newProfile} />
+    if (!newProfile) {
+      // Handle insert failure, e.g., redirect or show error
+      redirect('/login?error=profile_creation_failed')
+    }
+    return <DashboardContent user={newProfile as any} />
   }
 
-  return <DashboardContent user={profile} />
+  return <DashboardContent user={profile as any} />
 }

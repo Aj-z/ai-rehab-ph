@@ -56,7 +56,7 @@ export default async function ReportsPage() {
             <p className="text-gray-600 text-center mb-8 max-w-md">
               Download a comprehensive PDF report of your rehabilitation progress.
             </p>
-            <GenerateReportButton userId={session.user.id} userName={profile.full_name} />
+            <GenerateReportButton userId={session.user.id} userName={profile.full_name ?? undefined} />
           </div>
         </div>
 

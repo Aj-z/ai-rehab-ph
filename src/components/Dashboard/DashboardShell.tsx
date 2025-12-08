@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useSupabase } from "@/lib/supabase-context"; // ✅ NEW
-
+import type { Profile } from "@/types/profile"; //
 interface Props {
   children: React.ReactNode;
   user: Profile | null;
@@ -11,6 +11,7 @@ interface Props {
 
 export function DashboardShell({ children, user }: Props) {
   const router = useRouter();
+  const pathname = usePathname();
   const supabase = useSupabase();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -55,7 +56,7 @@ export function DashboardShell({ children, user }: Props) {
                 key={item.path}
                 href={item.path}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition group
-                  ${router.pathname === item.path ? 'bg-teal-100 text-teal-900 border-l-4 border-teal-600' : 'text-gray-700 hover:bg-teal-50 hover:text-teal-700'}`}
+                  ${pathname === item.path ? 'bg-teal-100 text-teal-900 border-l-4 border-teal-600' : 'text-gray-700 hover:bg-teal-50 hover:text-teal-700'}`}
               >
                 <span className="text-lg">{item.icon}</span>
                 <span className="font-medium">{item.label}</span>
@@ -95,7 +96,7 @@ export function DashboardShell({ children, user }: Props) {
               </div>
               <div>
                 <p className="text-gray-900 font-semibold">{user?.full_name || 'User'}</p>
-                <p className="text-gray-600 text-sm">{user?.medical_record_number || 'No MR#'}</p>
+                <p className="text-gray-600 text-sm">{user?.id || 'No ID'}</p>
               </div>
             </div>
             <div className="flex gap-2">

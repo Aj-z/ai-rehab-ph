@@ -40,7 +40,10 @@ export function QuickPainLogger({ userId }: Props) {
 
       if (error) throw error;
 
-      setLastLog(data);
+      setLastLog({
+        ...data,
+        logged_at: data.logged_at ?? new Date().toISOString(),
+      });
       toast.success(`Pain level ${level}/10 logged successfully!`);
     } catch (error: any) {
       toast.error(`Error: ${error.message}`);

@@ -3,7 +3,7 @@
 import { createContext, useContext } from 'react';
 import { createClient } from '@/lib/supabase-client';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from '@/types/supabase';
+import type { Database } from '../lib/database.types.ts' // Adjust the path as needed
 
 type TypedSupabaseClient = SupabaseClient<Database>;
 
