@@ -25,7 +25,7 @@ export default function AuthCard() {
 
   return (
     <div className="glass-card p-10 rounded-2xl shadow-2xl backdrop-blur-xl">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Login • Secure Access Link</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Secure Login • To Dashboard</h2>
 
       <form onSubmit={handleMagicLink} className="space-y-4">
         <input
