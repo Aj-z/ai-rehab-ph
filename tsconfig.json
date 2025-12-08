@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "src/app/api/saveAssessment", "src/app/dashboard/progress", "src/app/dashboard/appointments"  ],
   "exclude": ["node_modules"]
 }

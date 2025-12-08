@@ -1,43 +1,33 @@
-import { createClient } from "@/lib/supabase-server";
-import PainChart from "@/components/PainChart";
-import SquatCounter from "@/components/SquatCounter";
-import EmailReportButton from "@/components/EmailReportButton";
-import QuickPainButtons from "@/components/QuickPainButtons";
-import { redirect } from "next/navigation";
+import { createClient } from '@/lib/supabase-server'
+import { redirect } from 'next/navigation'
+import { DashboardContent } from '@/components/Dashboard/DashboardContent'
 
+export default async function DashboardPage() {
+  const supabase = await createClient() // ✅ Await client creation
 
-export default async function Dashboard() {
-  const supabase = await createClient();
-  const { data: user } = await supabase.auth.getUser();
-  if (!user) redirect("/");
+  const { data: { session } } = await supabase.auth.getSession()
 
-  const { data: injuries } = await supabase
-    .from("injuries")
-    .select("id")
-    .eq("user_id", user.id);
-  const injuryIds = injuries?.map((i) => i.id) ?? [];
+  if (!session) {
+    redirect('/login?error=access_denied')
+  }
 
-  const { data } = await supabase
-    .from("daily_logs")
-    .select("logged_at, pain_level")
-    .in("injury_id", injuryIds)
-    .order("logged_at", { ascending: true });
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', session.user.id)
+    .single()
 
-  return (
-    <main className="min-h-screen text-white p-6 md:p-12">
-      <QuickPainButtons /> 
-      <div className="max-w-5xl mx-auto space-y-8">
-        <h1 className="text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">
-          Recovery Dashboard
-        </h1>
+  if (!profile) {
+    const { data: newProfile } = await supabase
+      .from('profiles')
+      .insert({
+        id: session.user.id,
+        full_name: session.user.user_metadata?.full_name || 'User',
+      })
+      .select()
+      .single()
+    return <DashboardContent user={newProfile} />
+  }
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <PainChart data={data ?? []} />
-          <SquatCounter />
-        </div>
-
-        <EmailReportButton email={user.email} />
-      </div>
-    </main>
-  );
+  return <DashboardContent user={profile} />
 }

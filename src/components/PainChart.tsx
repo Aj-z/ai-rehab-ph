@@ -11,6 +11,7 @@ import {
   stop,
 } from "recharts";
 
+
 type Log = { logged_at: string; pain_level: number };
 
 export default function PainChart({ data }: { data: Log[] }) {

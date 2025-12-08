@@ -9,17 +9,30 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@mediapipe/camera_utils": "^0.3.1675466862",
     "@mediapipe/pose": "^0.5.1675469404",
+    "@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
     "@react-pdf/renderer": "^4.3.1",
     "@supabase/auth-helpers-nextjs": "^0.15.0",
     "@supabase/ssr": "^0.8.0",
-    "@supabase/supabase-js": "^2.86.0",
-    "next": "16.0.6",
+    "@supabase/supabase-js": "^2.86.2",
+    "animejs": "^3.2.2",
+    "axios": "^1.13.2",
+    "date-fns": "^4.1.0",
+    "echarts": "^6.0.0",
+    "emailjs-com": "^3.2.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.4",
+    "lucide-react": "^0.555.0",
+    "next": "^16.0.7",
+    "openai": "^6.10.0",
+    "pdf-lib": "^1.17.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "recharts": "^3.5.1",
-    "resend": "^6.5.2"
+    "resend": "^6.5.2",
+    "sonner": "^2.0.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.17",
@@ -31,7 +44,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.6",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.17",
+    "tailwindcss": "^3.4.18",
     "typescript": "^5"
   }
 }

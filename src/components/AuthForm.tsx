@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 
@@ -12,7 +12,7 @@ export default function AuthForm() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/dashboard`, // ← lands user on dashboard after click
+        emailRedirectTo: `${window.location.origin}/auth/callback`, // FIXED: Point to callback
       },
     });
 
