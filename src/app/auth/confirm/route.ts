@@ -1,4 +1,3 @@
-// src/app/auth/confirm/route.ts
 import { createClient } from "@/lib/supabase-server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,15 +8,17 @@ export async function GET(req: NextRequest) {
   const type = searchParams.get("type") ?? "magiclink";
   const email = searchParams.get("email");
 
-  // Handle next param safely
+  // ✅ SAFE NEXT PARAM
   let next = searchParams.get("next") ?? "/dashboard";
 
-  const allowedDomain = "https://aj-rehab-ph.onrender.com";
+  const allowedDomain = process.env.NEXT_PUBLIC_SITE_URL!;
   const isSafe =
     next.startsWith("/") ||
     next.startsWith(allowedDomain);
 
   if (!isSafe) next = "/dashboard";
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
 
   if (token_hash && email) {
     const supabase = await createClient();
@@ -29,11 +30,15 @@ export async function GET(req: NextRequest) {
     });
 
     if (!error) {
-      return NextResponse.redirect(new URL(next, req.url));
+      const redirectUrl = next.startsWith("http")
+        ? next
+        : new URL(next, siteUrl).toString();
+
+      return NextResponse.redirect(redirectUrl);
     }
   }
 
   return NextResponse.redirect(
-    new URL("/?error=auth_failed", req.url)
+    new URL("/?error=auth_failed", siteUrl)
   );
 }

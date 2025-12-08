@@ -26,25 +26,31 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
 
-  // Safe next handling
+  // ✅ SAFE NEXT HANDLING
   let next = searchParams.get("next") ?? "/dashboard";
 
-  const allowedDomain = "https://aj-rehab-ph.onrender.com";
+  const allowedDomain = process.env.NEXT_PUBLIC_SITE_URL!;
   const isSafe =
     next.startsWith("/") ||
     next.startsWith(allowedDomain);
 
   if (!isSafe) next = "/dashboard";
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
+
   if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      return NextResponse.redirect(new URL(next, request.url));
+      const redirectUrl = next.startsWith("http")
+        ? next
+        : new URL(next, siteUrl).toString();
+
+      return NextResponse.redirect(redirectUrl);
     }
   }
 
   return NextResponse.redirect(
-    new URL("/login?error=access_denied&error_code=otp_expired", request.url)
+    new URL("/login?error=access_denied&error_code=otp_expired", siteUrl)
   );
 }
