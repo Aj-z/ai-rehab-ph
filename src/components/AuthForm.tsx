@@ -11,7 +11,7 @@ export default function AuthForm() {
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: {},
+      options: { emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/confirm?next=/dashboard` },
     });
 
     if (!error) alert("📬 Check your mail for the magic link!");

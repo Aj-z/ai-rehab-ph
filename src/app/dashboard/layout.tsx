@@ -1,3 +1,4 @@
+// app/dashboard/layout.tsx
 import { createClient } from '@/lib/supabase-server';
 import { redirect } from 'next/navigation';
 import { DashboardShell } from '@/components/Dashboard/DashboardShell';
@@ -12,26 +13,45 @@ export default async function DashboardLayout({
 }) {
   const supabase = await createClient();
 
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) redirect('/login?error=access_denied');
+  // ✅ SECURE: Use getUser() instead of getSession()
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  
+  if (authError || !user) {
+    redirect('/login?error=access_denied');
+  }
 
-  const { data: profile } = await supabase
+  // Try to get existing profile
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('*')
-    .eq('id', session.user.id)
-    .single() as { data: Profile | null };
+    .eq('id', user.id)
+    .single() as { data: Profile | null; error: any };
 
-  if (!profile) {
-    // Auto-create profile if missing
-    const { data: newProfile } = await supabase
+  // Profile doesn't exist - create it
+  if (profileError?.code === 'PGRST116') {
+    const { data: newProfile, error: createError } = await supabase
       .from('profiles')
       .insert({
-        id: session.user.id,
-        full_name: session.user.user_metadata?.full_name || 'User',
+        id: user.id,
+        email: user.email,
+        full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
+        created_at: new Date().toISOString(),
       })
       .select()
-      .single();
+      .single() as { data: Profile | null; error: any };
+
+    if (createError) {
+      console.error('Profile creation failed:', createError);
+      redirect('/login?error=profile_creation_failed');
+    }
+
     return <DashboardShell user={newProfile}>{children}</DashboardShell>;
+  }
+
+  // Other profile errors
+  if (profileError) {
+    console.error('Profile fetch error:', profileError);
+    redirect('/login?error=profile_fetch_failed');
   }
 
   return <DashboardShell user={profile}>{children}</DashboardShell>;

@@ -11,6 +11,7 @@ export default function AuthCard() {
 
     const email = new FormData(e.currentTarget).get("email") as string;
 
+    // Classic magic link flow
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
@@ -21,8 +22,9 @@ export default function AuthCard() {
     setLoading(false);
 
     if (!error) {
-      alert("📬 Check your email for the login link!");
+      alert("📬 Check your email for the magic link!");
     } else {
+      console.error("Magic link error:", error);
       alert(error.message);
     }
   }

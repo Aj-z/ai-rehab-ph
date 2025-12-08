@@ -1,43 +1,62 @@
-import { createClient } from "@/lib/supabase-server";
-import { NextRequest, NextResponse } from "next/server";
+// app/auth/confirm/route.ts
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
+export async function GET(request: Request) {
+  const cookieStore = await cookies();
 
-  const token_hash = searchParams.get("token_hash");
-  const type = searchParams.get("type") ?? "magiclink";
-  const email = searchParams.get("email");
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+        set(name: string, value: string, options: any) {
+          cookieStore.set(name, value, options);
+        },
+        remove(name: string, options: any) {
+          cookieStore.set(name, '', { ...options, maxAge: 0 });
+        },
+      },
+    }
+  );
 
-  // ✅ SAFE NEXT PARAM
+  const { searchParams } = new URL(request.url);
+  
+  // Supabase sends 'code' for PKCE flow (magic links)
+  const code = searchParams.get("code");
+  
+  // Handle the 'next' redirect safely
   let next = searchParams.get("next") ?? "/dashboard";
-
   const allowedDomain = process.env.NEXT_PUBLIC_SITE_URL!;
-  const isSafe =
-    next.startsWith("/") ||
-    next.startsWith(allowedDomain);
-
-  if (!isSafe) next = "/dashboard";
+  const isSafe = next.startsWith("/") || next.startsWith(allowedDomain);
+  
+  if (!isSafe) {
+    next = "/dashboard";
+  }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
 
-  if (token_hash && email) {
-    const supabase = await createClient();
-
-    const { error } = await supabase.auth.verifyOtp({
-      email,
-      token_hash,
-      type: type as "magiclink" | "recovery" | "invite",
-    });
+  // Exchange the code for a session
+  if (code) {
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
+      // Build redirect URL
       const redirectUrl = next.startsWith("http")
         ? next
         : new URL(next, siteUrl).toString();
 
       return NextResponse.redirect(redirectUrl);
     }
+
+    console.error("Auth error:", error);
   }
 
+  // Redirect to home with error
   return NextResponse.redirect(
     new URL("/?error=auth_failed", siteUrl)
   );
