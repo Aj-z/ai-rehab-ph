@@ -8,14 +8,18 @@ export default function AuthCard() {
   async function handleMagicLink(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+
     const email = new FormData(e.currentTarget).get("email") as string;
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: {},
+      options: {
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/confirm?next=/dashboard`,
+      },
     });
 
     setLoading(false);
+
     if (!error) {
       alert("📬 Check your email for the login link!");
     } else {
@@ -25,7 +29,9 @@ export default function AuthCard() {
 
   return (
     <div className="glass-card p-10 rounded-2xl shadow-2xl backdrop-blur-xl">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Secure Login • To Dashboard</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+        Secure Login • To Dashboard
+      </h2>
 
       <form onSubmit={handleMagicLink} className="space-y-4">
         <input
@@ -43,7 +49,9 @@ export default function AuthCard() {
         </button>
       </form>
 
-      <p className="text-center text-sm text-gray-500 mt-3">No password required — login fast.</p>
+      <p className="text-center text-sm text-gray-500 mt-3">
+        No password required — login fast.
+      </p>
     </div>
   );
 }
