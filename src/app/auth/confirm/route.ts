@@ -7,8 +7,17 @@ export async function GET(req: NextRequest) {
 
   const token_hash = searchParams.get("token_hash");
   const type = searchParams.get("type") ?? "magiclink";
-  const next = searchParams.get("next") ?? "/dashboard";
-  const email = searchParams.get("email"); // REQUIRED by Supabase
+  const email = searchParams.get("email");
+
+  // Handle next param safely
+  let next = searchParams.get("next") ?? "/dashboard";
+
+  const allowedDomain = "https://aj-rehab-ph.onrender.com";
+  const isSafe =
+    next.startsWith("/") ||
+    next.startsWith(allowedDomain);
+
+  if (!isSafe) next = "/dashboard";
 
   if (token_hash && email) {
     const supabase = await createClient();
