@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase-server";
 import { Resend } from "resend";
 import { renderToBuffer } from "@react-pdf/renderer";
-import ReportPDF from "@/components/ReportPDF"; // React component
+
 
 export async function createInjury(userId: string, bodyPart: string) {
   const supabase = createClient(); // server-side client
