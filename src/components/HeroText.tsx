@@ -1,5 +1,7 @@
-import React from "react";
+import React, { memo } from 'react';
+import VideoModal from './VideoModal';
 
+const MemoizedVideoModal = memo(VideoModal);
 export default function HeroText() {
   return (
     <div className="space-y-6">
@@ -12,7 +14,7 @@ export default function HeroText() {
 
       <div className="flex gap-4">
         <a href="/assessment" className="btn-primary px-8 py-4 rounded-lg text-lg inline-block">Start Assessment</a>
-        <button className="border-2 border-teal-600 text-teal-700 px-8 py-4 rounded-lg hover:bg-teal-50">Watch Demo</button>
+         <MemoizedVideoModal videoId="5ZFTs27xBnI?si=Na_CUWfdpMnlS_Pg" />
       </div>
     </div>
   );
