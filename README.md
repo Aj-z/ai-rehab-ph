@@ -41,3 +41,11 @@ Stack
 •	Backend: Supabase (PostgreSQL, Auth, Realtime)
 
 •	Styling: Tailwind CSS with glassmorphism effects
+
+________________________________________
+## License
+This project is licensed under the **CC BY-NC 4.0** license.
+
+You are free to explore and learn from the code, but **commercial usage, reselling, or deploying this as a paid product is strictly prohibited** without written permission.
+
+For licensing inquiries, contact me at: [your email]
