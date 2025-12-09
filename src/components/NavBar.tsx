@@ -33,7 +33,7 @@ export default function NavBar() {
             </a>
           </div>
 
-        <button className="btn-primary px-6 py-2 font-semibold rounded-lg">Get Started</button>
+        <button className="btn-primary px-6 py-2 font-semibold rounded-lg"  onClick={() => window.location.href = "/dashboard"}>Dashboard</button>
       </div>
     </nav>
   );
