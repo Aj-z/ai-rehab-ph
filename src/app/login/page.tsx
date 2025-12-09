@@ -50,21 +50,32 @@ function LoginContent() {
       <div className="w-full max-w-md glass-card rounded-2xl p-8 border border-white/10 shadow-2xl">
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-2xl font-bold text-white">AI</span>
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Rehab AI</h1>
-          <p className="text-gray-400">Sign in with your email</p>
+          <h1 className="text-3xl font-bold text-black mb-2">Rehab AI</h1>
+          <p className="text-gray-400">Sign up with your email</p>
         </div>
-
+         
         <AuthForm />
-
-        <div className="mt-6 pt-6 border-t border-white/10">
-          <p className="text-center text-sm text-gray-400">
-            New to Rehab AI?{' '}
-            <a href="/register" className="text-cyan-400 hover:text-cyan-300 font-medium">
-              Create an account
-            </a>
+        <button 
+          className="w-full mt-6 bg-cyan-600 text-white py-2 rounded-lg hover:cyan-700"
+          onClick={() => window.location.href = "/dashboard"}
+        >
+          <p className="text-center text-sm text-gray-200">
+            Already have magic link? {' '}
+            <button 
+              className="text-white hover:text-cyan-400 font-medium"
+              onClick={() => window.location.href = "/dashboard"}
+            >
+              then go to the dashboard 
+            </button>
           </p>
+        </button>
+         
+        <div className="mt-6 pt-6 border-t border-white/10">
+          
         </div>
       </div>
     </div>
